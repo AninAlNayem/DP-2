@@ -1,0 +1,57 @@
+/*
+Problem Statement
+Two friends are playing a game. They have an array of integers.
+Initially their score is 0. The game advances in alternating turns.
+In each turn a friend either takes the first or the last element of the array and add it to his score.
+The game ends when the array becomes empty. Determine who gets the most score.
+*/
+
+#include<bits/stdc++.h>
+#define ll long long
+using namespace std;
+
+ll solve(ll i,ll j,vector<ll> &arr,vector<vector<ll>> &dp){
+
+    if(i>j){
+      return 0;
+    }
+    if(i==j){
+      return arr[i];
+    }
+    if(dp[i][j]!=-1){
+      return dp[i][j];
+    }
+    ll take_i=arr[i]+min(solve(i+2,j,arr,dp),solve(i+1,j-1,arr,dp));
+    ll take_j=arr[j]+min(solve(i,j-2,arr,dp),solve(i+1,j-1,arr,dp));
+
+    return dp[i][j]=max(take_i,take_j);
+
+}
+
+int main(){
+   ll n;
+   cin>>n;
+   vector<ll>arr(n,0);
+   ll sum=0;
+   for(int i=0;i<n;i++){
+     cin>>arr[i];
+     sum+=arr[i];
+   }
+   vector< vector<ll> >dp(n,vector<ll>(n,-1));
+   ll p1=solve(0,n-1,arr,dp);
+
+   //cout<<"p1="<<p1<<endl;
+
+   ll p2=sum-p1;
+   if(p1>p2){
+     printf("1\n");
+   }
+   else if(p1<p2){
+     printf("2\n");
+   }
+   else{
+    printf("3\n");
+   }
+
+return 0;
+}
